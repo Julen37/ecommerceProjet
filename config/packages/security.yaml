@@ -20,6 +20,9 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
+                # csrf_parameter: '_csrf_token' # sert a afficher le token de la session avec dans le twig {{csrf_token('intention')}}
+                # csrf_token_id: 'intention'
+
             logout:
                 path: app_logout
                 # where to redirect after logout
