@@ -3,18 +3,21 @@
 {% block title %}Categories{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="container"> 
+    <a href="{{ path('app_category_new') }}" class="btn btn-success ">Add a category</a>
+        <div class="row">
+            {% for category in categories %}
+                <div class="card text-bg-dark m-4 col-3 " > 
+                    <div class="card-body border-light mb-3 " >
+                        <h5 class="card-title">{{category.name}}</h5>
+                        <a href="{{ path('app_category_update',{'id': category.id}) }}" class="btn btn-warning ">Modify</a>
+                        <a href="{{ path('app_category_delete',{'id': category.id}) }}" class="btn btn-danger ">Delete</a>
+                    </div>
+                </div>
+            {% endfor %}   
+        </div>
+    </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/wamp64/www/ecommerceprojet/ecommerceProjet/src/Controller/CategoryController.php</code></li>
-        <li>Your template at <code>C:/wamp64/www/ecommerceprojet/ecommerceProjet/templates/category/index.html.twig</code></li>
-    </ul>
-</div>
+
 {% endblock %}

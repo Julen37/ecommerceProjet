@@ -24,7 +24,8 @@ final class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/category/new', name: 'app_category_new')]
+    // NEW CATEGORY
+    #[Route('/categoryNew', name: 'app_category_new')]
     public function addCategory(Request $request, EntityManagerInterface $entityManager): Response
     {
         $category = new Category();
@@ -45,5 +46,39 @@ final class CategoryController extends AbstractController
             'controller_name' => 'CategoryController',
             'form' => $form->createView(),
         ]);
+    }
+
+    // UPDATE
+    #[Route('/categoryUpdate/{id}', name: 'app_category_update')] 
+    public function update_form(Request $request, EntityManagerInterface $entityManager, Category $category): Response 
+    {
+        // $category = $entityManager->getRepository(Category::class)->find($id); // // enlever cette ligne, le $id dans la function et ajouter lentity a la place
+        $form = $this->createForm(CategoryFormType::class, $category); 
+        $form->handleRequest($request);
+        if  ( $form->isSubmitted() && $form->isValid()){ 
+            $entityManager->persist($category);
+            $entityManager->flush(); 
+
+            // $this->addFlash('notice', 'Edit successfull !');
+
+            return $this->redirectToRoute('app_category'); 
+        }
+
+        return $this->render('category/updateCategory.html.twig', [ 
+            'form' => $form->createView()
+        ]);
+    }
+
+    //DELETE
+    #[Route('/categoryDelete/{id}', name: 'app_category_delete')] 
+    public function delete_form(EntityManagerInterface $entityManager, Category $category): Response 
+    {
+        
+        $entityManager->remove($category); 
+        $entityManager->flush(); 
+
+        // $this->addFlash('notice', 'Deletation successfull !');
+
+        return $this->redirectToRoute('app_category'); 
     }
 }
