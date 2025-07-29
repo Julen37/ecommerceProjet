@@ -37,7 +37,7 @@ final class CategoryController extends AbstractController
             $entityManager->persist($category);
             $entityManager->flush(); 
 
-            // $this->addFlash('notice', 'Edit successfull !');
+            $this->addFlash('success', 'The new category have been added !');
 
             return $this->redirectToRoute('app_category'); 
         }
@@ -59,7 +59,7 @@ final class CategoryController extends AbstractController
             // $entityManager->persist($category); // // pas obligatoire ici vu qu'on peut modifier a l'infini
             $entityManager->flush(); 
 
-            // $this->addFlash('notice', 'Edit successfull !');
+            $this->addFlash('success', 'The category have been updated !');
 
             return $this->redirectToRoute('app_category'); 
         }
@@ -77,7 +77,7 @@ final class CategoryController extends AbstractController
         $entityManager->remove($category); 
         $entityManager->flush(); 
 
-        // $this->addFlash('notice', 'Deletation successfull !');
+        $this->addFlash('danger', 'The category have been deleted.');
 
         return $this->redirectToRoute('app_category'); 
     }

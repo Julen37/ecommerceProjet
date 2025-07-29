@@ -3,7 +3,8 @@
 {% block title %}New Category{% endblock %}
 
 {% block body %}
-    <div class="container containerForm addCategoryForm">
+    <a href="{{ path('app_category') }}" class="btn btn-success mb-3">Return to categories</a>
+    <div class="container containerForm addCategoryForm"> 
         <div class="form">
             <h2 class="mb-4 text-center">Edit the category</h2>
             {{ form_start(form) }}
