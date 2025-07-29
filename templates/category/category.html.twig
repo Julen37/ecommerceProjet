@@ -4,11 +4,12 @@
 
 {% block body %}
 
-<div class="container"> 
-    <a href="{{ path('app_category_new') }}" class="btn btn-success ">Add a category</a>
-        <div class="row">
+    <div class="container"> 
+        <h1 class="text-center mt-4 mb-4">List of Categories</h1>
+        <a href="{{ path('app_category_new') }}" class="btn btn-success mb-3">Add a category</a>
+        {# <div class="row">
             {% for category in categories %}
-                <div class="card text-bg-dark m-4 col-3 " > 
+                <div class="card text-bg-dark m-2 col-3 " > 
                     <div class="card-body border-light mb-3 " >
                         <h5 class="card-title">{{category.name}}</h5>
                         <a href="{{ path('app_category_update',{'id': category.id}) }}" class="btn btn-warning ">Modify</a>
@@ -16,7 +17,30 @@
                     </div>
                 </div>
             {% endfor %}   
-        </div>
+        </div> #}
+
+        {# tableau #}
+        <table class='table table-striped table-dark'>
+            <tr>
+                <th>Name of the category</th>
+                <th>Action</th>
+            </tr>
+            {% for category in categories %}
+                <tr>
+                    <td>
+                        {{ category.name }}
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-warning" href="{{ path('app_category_update', {'id':category.id}) }}">Modify</a>
+                        <a onclick= "return confirm('Do you really want to delete this category?')" class='btn btn-danger' href="{{ path('app_category_delete', {'id':category.id}) }}" >Delete</a>
+                    </td>
+                </tr>
+                {% else %}
+                <p>Aucune catégorie à afficher</p>
+            {% endfor %}
+        </table>
+        {# <a href="{{ path('app_category_new') }}" class="btn btn-success mt-3">Add a category</a> #}
+
     </div>
 
 

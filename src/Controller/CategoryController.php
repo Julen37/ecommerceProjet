@@ -52,11 +52,11 @@ final class CategoryController extends AbstractController
     #[Route('/categoryUpdate/{id}', name: 'app_category_update')] 
     public function update_form(Request $request, EntityManagerInterface $entityManager, Category $category): Response 
     {
-        // $category = $entityManager->getRepository(Category::class)->find($id); // // enlever cette ligne, le $id dans la function et ajouter lentity a la place
+        // $category = $entityManager->getRepository(Category::class)->find($id); // // enlever cette ligne, le $id dans la function (grace au paramconverter de symfony) et ajouter lentity a la place 
         $form = $this->createForm(CategoryFormType::class, $category); 
         $form->handleRequest($request);
         if  ( $form->isSubmitted() && $form->isValid()){ 
-            $entityManager->persist($category);
+            // $entityManager->persist($category); // // pas obligatoire ici vu qu'on peut modifier a l'infini
             $entityManager->flush(); 
 
             // $this->addFlash('notice', 'Edit successfull !');
