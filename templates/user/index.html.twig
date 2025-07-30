@@ -26,7 +26,7 @@
                     {% endfor %}
                 </td>
                 <td>
-                <a href="" class="btn btn-outline-warning">Modify</a>
+                <a href="{{ path('app_user_update_role', {'id': app.user.id}) }}" onclick= "return confirm('Do you really want to change the role of this user ?')" class="btn btn-outline-warning">Modify Role</a>
                 <a href="" class="btn btn-danger" onclick= "return confirm('Do you really want to delete this user?')">Delete</a>
                 </td>
             </tr>
