@@ -37,5 +37,17 @@ final class UserController extends AbstractController
 
         return $this->redirectToRoute('app_user'); 
     }
-    
+
+    // // DELETE ROLE - EDITOR / USER
+    // #[Route('/user/role/update/{id}', name: 'app_user_delete_role')] 
+    // #[IsGranted("ROLE_ADMIN")]
+    // public function updateRole(EntityManagerInterface $entityManager, User $user): Response
+    // {
+    //     $user->setRoles([]);
+    //     $entityManager->flush(); 
+
+    //     $this->addFlash('success', 'The user\'s role have been updated to Editor !');
+
+    //     return $this->redirectToRoute('app_user'); 
+    // }
 }
