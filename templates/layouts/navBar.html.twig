@@ -37,12 +37,24 @@
                         <li><a class="dropdown-item" href="">Products</a></li>
                         <li><a class="dropdown-item" href="">Add a product</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="">User</a></li>
+                        <li><a class="dropdown-item" href="{{ path('app_user') }}">User</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ path('app_logout') }}" class="nav-link">Log out</a>
+                    <a href="{{ path('app_logout') }}" class="nav-link">Logout</a>
                 </li>
+            {% endif %}
+            {% if app.user == false %}
+                <li class="nav-item">
+                    <a href="{{ path('app_register') }}" class="nav-link">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ path('app_login') }}" class="nav-link">Login</a>
+                </li>
+            {# {% else %}
+                <li class="nav-item">
+                    <a href="{{ path('app_logout') }}" class="nav-link">Logout</a>
+                </li> #}
             {% endif %}
             
                 {# <li class="nav-item">
