@@ -3,14 +3,14 @@
 {% block title %}Categories{% endblock %}
 
 {% block body %}
-
+{# {% include 'layouts/navBar.html.twig'%} #}
     <div class="container"> 
         <h1 class="text-center mt-4 mb-4">List of Categories</h1>
 
         {% include 'layouts/_flash_message.html.twig'%} {# pour la notification flash  #}
 
         <a href="{{ path('app_category_new') }}" class="btn btn-success mb-3">Add a category</a>
-        
+
         {# <div class="row">
             {% for category in categories %}
                 <div class="card text-bg-dark m-2 col-3 " > 
