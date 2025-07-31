@@ -1,0 +1,7 @@
+{{ form_start(form) }}
+    {{ form_row(form.name, {'attr':{'class':'form form-control mb-2 mt-1', 'placeholder': "name"}}) }}
+    {{ form_row(form.description, {'attr':{'class':'form form-control mb-2 mt-1', 'placeholder': "description"}}) }}
+    {{ form_row(form.price, {'attr':{'class':'form form-control mb-2 mt-1', 'placeholder': "price"}}) }}
+    {{ form_row(form.subcategory, {'attr':{'class':'form form-control mb-2 mt-1'}}) }}
+    <button class="btn btn-block btn-l btn-primary mt-3 d-flex ms-auto">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

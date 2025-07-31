@@ -3,11 +3,11 @@
 {% block title %}New SubCategory{% endblock %}
 
 {% block body %}
-<div class="container ">
     <h1 class="text-center mt-4 mb-4">Create new SubCategory</h1>
+    <div class="container subcatForm">
+        
+        {{ include('sub_category/_form.html.twig') }}
 
-    {{ include('sub_category/_form.html.twig') }}
-
-    <a href="{{ path('app_sub_category_index') }}">back to list</a>
-</div>
+        <a href="{{ path('app_sub_category_index') }} "class="btn btn-outline-light mb-2">Back to list</a>
+    </div>
 {% endblock %}
