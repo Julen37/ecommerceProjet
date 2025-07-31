@@ -31,9 +31,9 @@
                     {% if ("ROLE_EDITOR" in user.roles) == false %}
                         <a href="{{ path('app_user_update_role', {'id': user.id}) }}" onclick= "return confirm('Do you really want to change the role of this user ?')" class="btn btn-outline-warning">Modify Role</a>
                     {% else %} 
-                        <a href="{{ path('app_user_delete_role', {'id': user.id}) }}" class="btn btn-outline-danger" onclick= "return confirm('Do you really want to delete the role for this user?')">Delete Role</a>
+                        <a href="{{ path('app_user_delete_role', {'id': user.id}) }}" onclick= "return confirm('Do you really want to delete the role of this user?')" class="btn btn-outline-danger" >Delete Role</a>
                     {% endif %}
-                    <a href="" class="btn btn-danger" onclick= "return confirm('Do you really want to delete this user?')">Delete User</a>
+                    <a href="{{ path('app_user_delete_user', {'id': user.id}) }}" onclick= "return confirm('Do you really want to delete this user?')" class="btn btn-danger">Delete User</a>
                 {% endif %}
                 </td>
             </tr>

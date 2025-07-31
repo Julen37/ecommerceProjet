@@ -28,7 +28,7 @@ final class UserController extends AbstractController
     // UPDATE ROLE - EDITOR / USER
     #[Route('/user/role/update/{id}', name: 'app_user_update_role')] 
     #[IsGranted("ROLE_ADMIN")]
-    public function updateRole(EntityManagerInterface $entityManager, User $user): Response
+    public function updateRoleEditor(EntityManagerInterface $entityManager, User $user): Response
     {
         $user->setRoles(["ROLE_EDITOR", "ROLE_USER"]);
         $entityManager->flush(); 
@@ -38,15 +38,29 @@ final class UserController extends AbstractController
         return $this->redirectToRoute('app_user'); 
     }
 
-    // // DELETE ROLE - EDITOR / USER
+   // DELETE ROLE - EDITOR 
     #[Route('/user/role/delete/{id}', name: 'app_user_delete_role')] 
     #[IsGranted("ROLE_ADMIN")]
-    public function deleteRole(EntityManagerInterface $entityManager, User $user): Response
+    public function deleteRoleEditor(EntityManagerInterface $entityManager, User $user): Response
     {
         $user->setRoles([]);
         $entityManager->flush(); 
 
         $this->addFlash('success', 'The user\'s role have been updated to Editor !');
+
+        return $this->redirectToRoute('app_user'); 
+    }
+
+    //DELETE USER
+    #[Route('/user/delete/{id}', name: 'app_user_delete_user')] 
+    #[IsGranted("ROLE_ADMIN")]
+    public function deleteUser($id, EntityManagerInterface $entityManager, UserRepository $userRepo): Response 
+    {
+        $user = $userRepo->find($id);
+        $entityManager->remove($user); 
+        $entityManager->flush(); 
+
+        $this->addFlash('danger', 'The user have been deleted.');
 
         return $this->redirectToRoute('app_user'); 
     }
