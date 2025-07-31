@@ -19,7 +19,7 @@ final class UserController extends AbstractController
     public function index(UserRepository $userRepo): Response
     {
 
-        return $this->render('user/index.html.twig', [
+        return $this->render('user/user.html.twig', [
             'controller_name' => 'UserController',
             'users' => $userRepo->findAll(), // on met directement le find all ici au lieu de réécrire la ligne au dessus du return
         ]);
@@ -39,15 +39,15 @@ final class UserController extends AbstractController
     }
 
     // // DELETE ROLE - EDITOR / USER
-    // #[Route('/user/role/update/{id}', name: 'app_user_delete_role')] 
-    // #[IsGranted("ROLE_ADMIN")]
-    // public function updateRole(EntityManagerInterface $entityManager, User $user): Response
-    // {
-    //     $user->setRoles([]);
-    //     $entityManager->flush(); 
+    #[Route('/user/role/delete/{id}', name: 'app_user_delete_role')] 
+    #[IsGranted("ROLE_ADMIN")]
+    public function deleteRole(EntityManagerInterface $entityManager, User $user): Response
+    {
+        $user->setRoles([]);
+        $entityManager->flush(); 
 
-    //     $this->addFlash('success', 'The user\'s role have been updated to Editor !');
+        $this->addFlash('success', 'The user\'s role have been updated to Editor !');
 
-    //     return $this->redirectToRoute('app_user'); 
-    // }
+        return $this->redirectToRoute('app_user'); 
+    }
 }
