@@ -3,7 +3,6 @@
 {% block title %}Categories{% endblock %}
 
 {% block body %}
-{# {% include 'layouts/navBar.html.twig'%} #}
     <div class="container"> 
         <h1 class="text-center mt-4 mb-4">List of Categories</h1>
 
@@ -11,19 +10,6 @@
 
         <a href="{{ path('app_category_new') }}" class="btn btn-success mb-3">Add a category</a>
 
-        {# <div class="row">
-            {% for category in categories %}
-                <div class="card text-bg-dark m-2 col-3 " > 
-                    <div class="card-body border-light mb-3 " >
-                        <h5 class="card-title">{{category.name}}</h5>
-                        <a href="{{ path('app_category_update',{'id': category.id}) }}" class="btn btn-warning ">Modify</a>
-                        <a href="{{ path('app_category_delete',{'id': category.id}) }}" class="btn btn-danger ">Delete</a>
-                    </div>
-                </div>
-            {% endfor %}   
-        </div> #}
-        
-        {# tableau #}
         <table class='table table-striped table-dark'>
             <tr>
                 <th>Name of the category</th>
@@ -43,9 +29,5 @@
                 <p>Aucune catégorie à afficher</p>
             {% endfor %}
         </table>
-        {# <a href="{{ path('app_category_new') }}" class="btn btn-success mt-3">Add a category</a> #}
-
     </div>
-
-
 {% endblock %}

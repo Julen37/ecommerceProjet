@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/admin')]
 final class UserController extends AbstractController
@@ -51,7 +50,7 @@ final class UserController extends AbstractController
         return $this->redirectToRoute('app_user'); 
     }
 
-    //DELETE USER
+    // DELETE USER
     #[Route('/user/delete/{id}', name: 'app_user_delete_user')] 
     #[IsGranted("ROLE_ADMIN")]
     public function deleteUser($id, EntityManagerInterface $entityManager, UserRepository $userRepo): Response 
