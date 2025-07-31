@@ -12,9 +12,13 @@
             {# form_widget permet d'enlever le label, le form_row l'affiche#}
             {{ form_row(registrationForm.lastName, {'attr':{'class':'form form-control mb-2  mt-1', 'placeholder': "Last name"}}) }}
             {{ form_row(registrationForm.email, {'attr':{'class':'form form-control mb-2  mt-1', 'placeholder': "Email"}}) }}
-            {{ form_row(registrationForm.plainPassword, {
+            {{ form_row(registrationForm.plainPassword.first, {
                 label: 'Password', 'attr':{'class':'form form-control mb-2  mt-1', 'placeholder': "Password"}
             }) }}
+            {{ form_row(registrationForm.plainPassword.second, {
+                label: 'Repeat Password', 'attr':{'class':'form form-control mb-2  mt-1', 'placeholder': "Repeat password"}
+            }) }}
+
             {{ form_row(registrationForm.agreeTerms, {'attr':{'class':'mt-3'}}) }}
 
             <button type="submit" class="btn btn-block btn-l btn-primary mt-3 d-flex ms-auto">Register</button>
