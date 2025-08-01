@@ -11,29 +11,47 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
-#[Route('/product')]
-#[IsGranted("ROLE_ADMIN")]
+#[Route('/editor/product')]
+#[IsGranted("ROLE_ADMIN", "ROLE_EDITOR")]
 final class ProductController extends AbstractController
 {
     #[Route(name: 'app_product_index', methods: ['GET'])]
     #[IsGranted("ROLE_ADMIN")]
     public function index(ProductRepository $productRepository): Response
     {
-        return $this->render('product/index.html.twig', [
+        return $this->render('product/product.html.twig', [
             'products' => $productRepository->findAll(),
         ]);
     }
-
+#region ADD
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
-    #[IsGranted("ROLE_ADMIN")]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    { // le slugger est une interface qui va servir a transformer le nom de notre image string en slug, une chaine de charactere, "mon image de Chat" va devenir "mon-image-de-chat", transforme pour que ce soit plus sur 
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $image = $form->get('image')->getData(); // recup le fichier de l'image qui sera telechargé
+
+            if ($image) { //si l'image existe / a été envoyé, on fait ca
+                $originalName = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME); //on recup le nom d'origine sans les extansions (.jpeg / png..)
+                $safeImageName = $slugger->slug($originalName); // on transforme/slugger le nom de l'image, pour remplacer tous les accents, espaces etc par un -
+                $newFileImageName = $safeImageName.'-'.uniqid().'.'.$image->guessExtension(); //ajoute un id unique et donc l'extension
+
+                try { // deplacer le fichier image dans le dossier qu'on a parametré dans le parametre image_directory
+                    $image->move
+                        ($this->getParameter('image_directory'),
+                        $newFileImageName);
+                } catch (FileException $exception) {
+                    //gestion d'un message d'erreur si besoin
+                }
+                    $product->setImage($newFileImageName); // sauvegarde le nom du fichier dans son entité
+            }  
+
             $entityManager->persist($product);
             $entityManager->flush();
 
@@ -47,18 +65,20 @@ final class ProductController extends AbstractController
             'form' => $form,
         ]);
     }
-
+#endregion ADD
+#region SHOW
     #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
-    #[IsGranted("ROLE_ADMIN")]
+    #[IsGranted("ROLE_ADMIN", "ROLE_EDITOR")]
     public function show(Product $product): Response
     {
         return $this->render('product/show.html.twig', [
             'product' => $product,
         ]);
     }
-
+#endregion SHOW
+#region EDIT
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
-    #[IsGranted("ROLE_ADMIN")]
+    #[IsGranted("ROLE_ADMIN", "ROLE_EDITOR")]
     public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ProductType::class, $product);
@@ -78,9 +98,10 @@ final class ProductController extends AbstractController
             'form' => $form,
         ]);
     }
-
+#endregion EDIT
+#region DELETE
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
-    #[IsGranted("ROLE_ADMIN")]
+    #[IsGranted("ROLE_ADMIN", "ROLE_EDITOR")]
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->getPayload()->getString('_token'))) {
@@ -93,4 +114,5 @@ final class ProductController extends AbstractController
 
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
     }
+#endregion DELETE
 }
