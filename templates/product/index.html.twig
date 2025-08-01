@@ -13,7 +13,6 @@
                 <th>Stock</th>
                 <th>Product</th>
                 <th>Description</th>
-                {# <th>Subcategory</th> #}
                 <th>Price</th>
                 <th>Image</th>
                 <th>Actions</th>
@@ -22,15 +21,21 @@
         <tbody>
         {% for product in products %}
             <tr>
-                <td>{{ product.stock }}</td>
+                <td>
+                    {% if product.stock > 0 %}
+                        {{ product.stock }}
+                    {% else %}   
+                        <span class="text-danger">Out of stock</span>
+                    {% endif %}
+                </td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.description|slice(0,100) }}...</td>
-                {# <td>{{ product.sub_category.name }}</td> #}
                 <td>{{ product.price }}</td>
                 <td>{{ product.image }}</td>
                 <td>
                     <a href="{{ path('app_product_show', {'id': product.id}) }}" class="btn btn-outline-success mb-1">Show</a>
                     <a href="{{ path('app_product_edit', {'id': product.id}) }}" class="btn btn-outline-warning">Modify</a>
+                    <a href="" class="btn btn-outline-info">Add stock</a>
                 </td>
             </tr>
         {% else %}
