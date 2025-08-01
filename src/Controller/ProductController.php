@@ -15,14 +15,13 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/editor/product')]
-#[IsGranted("ROLE_ADMIN", "ROLE_EDITOR")]
+#[IsGranted("ROLE_EDITOR")]
 final class ProductController extends AbstractController
 {
     #[Route(name: 'app_product_index', methods: ['GET'])]
-    #[IsGranted("ROLE_ADMIN")]
     public function index(ProductRepository $productRepository): Response
     {
-        return $this->render('product/product.html.twig', [
+        return $this->render('product/index.html.twig', [
             'products' => $productRepository->findAll(),
         ]);
     }
@@ -68,7 +67,6 @@ final class ProductController extends AbstractController
 #endregion ADD
 #region SHOW
     #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
-    #[IsGranted("ROLE_ADMIN", "ROLE_EDITOR")]
     public function show(Product $product): Response
     {
         return $this->render('product/show.html.twig', [
@@ -78,7 +76,6 @@ final class ProductController extends AbstractController
 #endregion SHOW
 #region EDIT
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
-    #[IsGranted("ROLE_ADMIN", "ROLE_EDITOR")]
     public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ProductType::class, $product);
@@ -101,7 +98,6 @@ final class ProductController extends AbstractController
 #endregion EDIT
 #region DELETE
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
-    #[IsGranted("ROLE_ADMIN", "ROLE_EDITOR")]
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->getPayload()->getString('_token'))) {
