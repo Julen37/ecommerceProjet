@@ -99,7 +99,6 @@ final class ProductController extends AbstractController
 
             $this->addFlash('success', 'The product have been updated !');
 
-
             return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -119,7 +118,6 @@ final class ProductController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('danger', 'The product have been deleted.');
-
         }
 
         return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
@@ -142,24 +140,24 @@ final class ProductController extends AbstractController
                 $newQuantity = $product->getStock() + $stockAdd->getQuantity(); // on recupere le stock deja present qu'on aditionne au stock qu'on a mit en plus
                 $product->setStock($newQuantity); // et on met a jour le stock du produit
 
+                $stockAdd->setCreatedAt(new DateTimeImmutable()); // pour mettre le createdat pour arreter l'erreur
+                $stockAdd->setProduct($product); //met a jour
                 $entityManager->persist($stockAdd);
                 $entityManager->flush();
 
-
                 $this->addFlash('success', 'The stock have been updated !');
                 return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+
             } else { //sinon on affiche un message flash et on redirect a la page stock add avec l'id du produit
                 $this->addFlash('danger', "The stock of the product can't be less than zero.");
                 return $this->redirectToRoute('app_product_stock_add', ['id'=>$product->getId()]);
             }         
         }
-
         return $this->render('product/addStock.html.twig',
             ['form'=> $form->createView(),
             'product'=>$product,
             ]
         );
-
     }
 #endregion ADD STOCK
 }
