@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class HomePageController extends AbstractController
 {
-    #[Route('/', name: 'app_home_page')]
+    #[Route('/', name: 'app_home_page', methods: ['GET'])]
     public function homePage(CategoryRepository $categoryRepo): Response
     {
         $categories = $categoryRepo->findAll();

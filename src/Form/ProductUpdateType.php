@@ -31,6 +31,7 @@ class ProductUpdateType extends AbstractType
                             'image/png',
                             'image/jpg',
                         ],
+                        'maxSizeMessage' => 'Your image must not exceed 1024ko',
                         'mimeTypesMessage' => 'Please choose a valid image file (jpeg, png, jpg)!',
                     ]) 
                 ]
@@ -38,7 +39,7 @@ class ProductUpdateType extends AbstractType
             // ->add('stock')
             ->add('subcategory', EntityType::class, [
                 'class' => SubCategory::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'multiple' => true,
             ])
         ;
