@@ -28,6 +28,7 @@ final class ProductController extends AbstractController
             'products' => $productRepository->findAll(),
         ]);
     }
+
 #region ADD
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
@@ -75,6 +76,7 @@ final class ProductController extends AbstractController
         ]);
     }
 #endregion ADD
+
 #region SHOW
     #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
     public function show(Product $product): Response
@@ -84,6 +86,7 @@ final class ProductController extends AbstractController
         ]);
     }
 #endregion SHOW
+
 #region EDIT
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
@@ -106,6 +109,7 @@ final class ProductController extends AbstractController
         ]);
     }
 #endregion EDIT
+
 #region DELETE
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
     public function delete(Request $request, Product $product, EntityManagerInterface $entityManager): Response
@@ -122,15 +126,40 @@ final class ProductController extends AbstractController
     }
 #endregion DELETE
 
-    #[Route('/add/product/{id}', name: 'app_product_stock_add', methods: ['POST'])]
-    public function stockAdd($id, Request $request, EntityManagerInterface $entityManager): Response
+#region ADD STOCK
+    #[Route('/add/product/{id}', name: 'app_product_stock_add', methods: ['GET', 'POST'])]
+    public function stockAdd($id, Request $request, EntityManagerInterface $entityManager, ProductRepository $productRepo): Response
     {
         $stockAdd = new AddProductHistory();
         $form =$this->createForm(AddProductHistoryType::class, $stockAdd);
         $form->handleRequest($request);
 
+        $product = $productRepo->find($id); //pour trouver les produits
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+            if($stockAdd->getQuantity()>0){ // si le stock est superieur a 0
+                $newQuantity = $product->getStock() + $stockAdd->getQuantity(); // on recupere le stock deja present qu'on aditionne au stock qu'on a mit en plus
+                $product->setStock($newQuantity); // et on met a jour le stock du produit
+
+                $entityManager->persist($stockAdd);
+                $entityManager->flush();
+
+
+                $this->addFlash('success', 'The stock have been updated !');
+                return $this->redirectToRoute('app_product_index', [], Response::HTTP_SEE_OTHER);
+            } else { //sinon on affiche un message flash et on redirect a la page stock add avec l'id du produit
+                $this->addFlash('danger', "The stock of the product can't be less than zero.");
+                return $this->redirectToRoute('app_product_stock_add', ['id'=>$product->getId()]);
+            }         
+        }
+
         return $this->render('product/addStock.html.twig',
-            ['form'=> $form->createView()]
+            ['form'=> $form->createView(),
+            'product'=>$product,
+            ]
         );
+
     }
+#endregion ADD STOCK
 }
