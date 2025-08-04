@@ -6,6 +6,7 @@ use App\Entity\AddProductHistory;
 use App\Entity\Product;
 use App\Form\AddProductHistoryType;
 use App\Form\ProductType;
+use App\Repository\AddProductHistoryRepository;
 use App\Repository\ProductRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -160,4 +161,19 @@ final class ProductController extends AbstractController
         );
     }
 #endregion ADD STOCK
+
+#region SHOW HISTORY
+    #[Route('/add/product/{id}/stock/history', name: 'app_product_stock_add_history', methods: ['GET'])]
+    public function showHistoryProductStock($id, ProductRepository $productRepo, AddProductHistoryRepository $addProductHistoryRepo): Response
+    {
+        $product = $productRepo->find($id);
+        $productAddHistory = $addProductHistoryRepo->findBy(['product'=>$product],['id'=>'DESC']);
+
+        return $this->render('product/addHistoryStockShow.html.twig', [
+            'productsAdded' => $productAddHistory,
+            'product'=>$product
+        ]);
+    }
+#endregion SHOW HISTORY
+
 }
