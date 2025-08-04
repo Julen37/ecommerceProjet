@@ -6,6 +6,6 @@
 <div class="container productForm">
     <h1 class="text-center mt-4 mb-4">Create new Product</h1>
     <a href="{{ path('app_product_index') }}" class="btn btn-outline-light mb-2">back to list</a>
-    {{ include('product/_form.html.twig') }}
+    {{ include('product/_form.html.twig', {'button_label': 'Update'}) }}
 </div>
 {% endblock %}

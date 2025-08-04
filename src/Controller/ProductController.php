@@ -6,6 +6,7 @@ use App\Entity\AddProductHistory;
 use App\Entity\Product;
 use App\Form\AddProductHistoryType;
 use App\Form\ProductType;
+use App\Form\ProductUpdateType;
 use App\Repository\AddProductHistoryRepository;
 use App\Repository\ProductRepository;
 use DateTimeImmutable;
@@ -62,7 +63,7 @@ final class ProductController extends AbstractController
             $stockHistory = new AddProductHistory();
             $stockHistory->setQuantity($product->getStock());
             $stockHistory->setProduct($product);
-            $stockHistory->setCreatedAt(new DateTimeImmutable());
+            $stockHistory->setCreatedAt(new \DateTimeImmutable('now', new \DateTimeZone('UTC')));
             $entityManager->persist($stockHistory);
             $entityManager->flush();
 
@@ -92,7 +93,7 @@ final class ProductController extends AbstractController
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Product $product, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ProductType::class, $product);
+        $form = $this->createForm(ProductUpdateType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

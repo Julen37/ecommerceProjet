@@ -20,7 +20,7 @@
                     <td>{{ productAdded.id }}</td>
                     <td>{{ product.name }}</td>
                     <td>{{ productAdded.quantity }}</td>
-                    <td>{{ productAdded.createdAt.format('d/m/Y h:i:s')}}</td>
+                    <td>{{ productAdded.createdAt|date('d/m/Y h:i:s', 'Europe/paris')}}</td> 
                 </tr>
             {% endfor %}
         </tbody>
