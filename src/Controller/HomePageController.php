@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
+use App\Repository\SubCategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -12,15 +13,16 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HomePageController extends AbstractController
 {
     #[Route('/', name: 'app_home_page', methods: ['GET'])]
-    public function homePage(CategoryRepository $categoryRepo, ProductRepository $productRepo): Response
+    public function homePage(CategoryRepository $categoryRepo, ProductRepository $productRepo, SubCategoryRepository $subcatRepo): Response
     {
         $categories = $categoryRepo->findAll();
         $product = $productRepo->findAll();
+        $subcategories = $subcatRepo->findAll();
 
         return $this->render('home_page/homePage.html.twig', [
-            'controller_name' => 'HomePageController',
             'categories'=> $categories,
-            'products'=>$product
+            'products'=>$product,
+            'subCategories'=>$subcategories,
         ]);
     }
 
@@ -34,9 +36,20 @@ final class HomePageController extends AbstractController
             // le 5 c'est pour 5resultats seulement
 
         return $this->render('home_page/show.html.twig', [
-            'controller_name' => 'HomePageController',
             'product'=>$product,
             'products'=>$lastProductsAdd,
         ]);
     }
+
+    #[Route('/product/subcategory/{id}/filter', name: 'app_home_product_filter', methods: ['GET'])]
+    public function filter($id, SubCategoryRepository $subcatRepo, CategoryRepository $categoryRepo,): Response
+    {
+        $subcategories = $subcatRepo->findAll();
+
+        return $this->render('home_page/filter.html.twig', [
+            'categories'=> $categoryRepo->findAll(),
+            'subCategories'=>$subcategories,
+        ]);
+    }
+
 }
