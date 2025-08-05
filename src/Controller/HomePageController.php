@@ -6,23 +6,29 @@ use App\Entity\Product;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Repository\SubCategoryRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class HomePageController extends AbstractController
 {
     #[Route('/', name: 'app_home_page', methods: ['GET'])]
-    public function homePage(CategoryRepository $categoryRepo, ProductRepository $productRepo, SubCategoryRepository $subcatRepo): Response
+    public function homePage(CategoryRepository $categoryRepo, ProductRepository $productRepo, SubCategoryRepository $subcatRepo, Request $request, PaginatorInterface $paginator): Response
     {
-        $categories = $categoryRepo->findAll();
-        $product = $productRepo->findAll();
-        $subcategories = $subcatRepo->findAll();
+    
+        $data= $productRepo->findby([],['id'=>'DESC']);
+        $products =$paginator->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            8
+        );
 
         return $this->render('home_page/homePage.html.twig', [
-            'categories'=> $categories,
-            'products'=>$product,
-            'subCategories'=>$subcategories,
+            'categories'=> $categoryRepo->findAll(),
+            'products'=>$products,
+            'subCategories'=>$subcatRepo->findAll(),
         ]);
     }
 
@@ -44,11 +50,15 @@ final class HomePageController extends AbstractController
     #[Route('/product/subcategory/{id}/filter', name: 'app_home_product_filter', methods: ['GET'])]
     public function filter($id, SubCategoryRepository $subcatRepo, CategoryRepository $categoryRepo,): Response
     {
-        $subcategories = $subcatRepo->findAll();
+        // on recupere la sous categorie correspondance a l'id passé en parametre
+        // et on accede aux produits de cette sous categorie
+        $product=$subcatRepo->find($id)->getProducts(); 
+        $subcat = $subcatRepo->find($id); // on recupere la sous categorie complete
 
         return $this->render('home_page/filter.html.twig', [
             'categories'=> $categoryRepo->findAll(),
-            'subCategories'=>$subcategories,
+            'subCategory'=>$subcat,
+            'products'=>$product,
         ]);
     }
 
