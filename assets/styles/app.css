@@ -24,3 +24,7 @@ body {
 .productForm{
     width: 600px;   
 }
+.titleProductLink{
+    text-decoration: none;
+    color: #c1afd1bb;
+}

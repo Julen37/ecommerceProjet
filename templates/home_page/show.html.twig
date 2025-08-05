@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="text-center mt-4 mb-4 ">{{product.name}}</h1>
+    <div class="card mb-3 text-bg-dark" style="max-width: 500em;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="{{asset('uploads/images/'~product.image)}}" class="img-fluid rounded-start" >
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{product.name}}</h5>
+                    <p class="card-text">{{product.description}}</p>
+                    <p class="card-text">{{product.price}}€</p>
+                    <a href="#" class="btn btn-outline-success">Add one</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
