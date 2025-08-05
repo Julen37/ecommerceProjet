@@ -6,11 +6,11 @@
 <div class="container"> 
         <div class="row">
             {% for product in products %}
-            <div class="card text-bg-dark m-4 col-2 " > {# m-4 c'est la marge / col-3 c'est pour faire des colonnes #}
+            <div class="card text-bg-dark m-4 col-2 p-0" > {# m-4 c'est la marge / col-3 c'est pour faire des colonnes #}
                 <img src="{{asset('uploads/images/'~product.image)}}" class="card-img-top" >
                 <div class="card-body border-light mb-3 " >
                     <h5 class="card-title">{{product.name}}</h5>
-                    <p class="card-text">{{product.price}}</p>
+                    <p class="card-text">{{product.price}}euro</p>
                     <p class="card-text">{{product.description|slice(0,100)}}...</p>
                 </div>
             </div>
