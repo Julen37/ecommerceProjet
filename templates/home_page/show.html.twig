@@ -5,7 +5,7 @@
 {% block body %}
 <div class="container">
     <h1 class="text-center mt-4 mb-4 ">{{product.name}}</h1>
-    <div class="card mb-3 text-bg-dark" style="max-width: 500em;">
+    <div class="card mb-3 text-bg-dark" style="width: 70em;">
         <div class="row g-0">
             <div class="col-md-4">
                 <img src="{{asset('uploads/images/'~product.image)}}" class="img-fluid rounded-start" >
@@ -15,10 +15,25 @@
                     <h5 class="card-title">{{product.name}}</h5>
                     <p class="card-text">{{product.description}}</p>
                     <p class="card-text">{{product.price}}€</p>
-                    <a href="#" class="btn btn-outline-success">Add one</a>
+                    <a href="#" class="btn btn-outline-success">Add to cart</a>
                 </div>
             </div>
         </div>
     </div>
+    <h2 class="mt-5">Latest products added</h2>
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-3 ">
+                <div class="card text-bg-dark" style="width: 15rem"> {# m-4 c'est la marge / col-3 c'est pour faire des colonnes #}
+                    <img src="{{asset('uploads/images/'~product.image)}}" class="card-img-top" >
+                    <div class="card-body border-light " >
+                    <a href="{{ path('app_home_product_show', {'id':product.id}) }}" class="titleProductLink"><h5 class="card-title">{{product.name}}</h5></a>
+                        <p class="card-text">{{product.description|slice(0,60)}}...</p>
+                        <a href="#" class="btn btn-outline-success">Add to cart</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}   
+        </div>
 </div>
 {% endblock %}

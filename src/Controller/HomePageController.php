@@ -25,12 +25,18 @@ final class HomePageController extends AbstractController
     }
 
     #[Route('/product/{id}/show', name: 'app_home_product_show', methods: ['GET'])]
-    public function showProduct(Product $product): Response
+    public function showProduct(Product $product, ProductRepository $productRepo): Response
     {
+
+            $lastProductsAdd = $productRepo->findbY([],['id'=>'DESC'],5); // -> recup et affiche les 5 derniers produits par ordre decroissant
+            // tableau vide signifie qu'on ne met aucun filtrage donc on recup tout les produits, 
+            // l'argument desc c'est pour ranger les id par ordre decroissant, 
+            // le 5 c'est pour 5resultats seulement
 
         return $this->render('home_page/show.html.twig', [
             'controller_name' => 'HomePageController',
-            'product'=>$product
+            'product'=>$product,
+            'products'=>$lastProductsAdd,
         ]);
     }
 }
