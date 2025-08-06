@@ -9,7 +9,7 @@
             {% for page in pagesInRange %}
                 {% if page != current %}
                     <li class="page-item" aria-content="page">
-                        <a href="{{ path(route, query|merge({(pageParameterName):page})) }}" class="page-link">{{ page }}</a>
+                        <a style="color: grey"href="{{ path(route, query|merge({(pageParameterName):page})) }}" class="page-link">{{ page }}</a>
                     </li>
                 {% else %}
                     <li class="page-item active" aria-content="page">

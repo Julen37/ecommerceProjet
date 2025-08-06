@@ -32,6 +32,7 @@ final class HomePageController extends AbstractController
         ]);
     }
 
+#region SHOW
     #[Route('/product/{id}/show', name: 'app_home_product_show', methods: ['GET'])]
     public function showProduct(Product $product, ProductRepository $productRepo): Response
     {
@@ -46,7 +47,9 @@ final class HomePageController extends AbstractController
             'products'=>$lastProductsAdd,
         ]);
     }
+#endregion SHOW
 
+#region FILTER
     #[Route('/product/subcategory/{id}/filter', name: 'app_home_product_filter', methods: ['GET'])]
     public function filter($id, SubCategoryRepository $subcatRepo, CategoryRepository $categoryRepo,): Response
     {
@@ -61,5 +64,5 @@ final class HomePageController extends AbstractController
             'products'=>$product,
         ]);
     }
-
+#endregion FILTER
 }

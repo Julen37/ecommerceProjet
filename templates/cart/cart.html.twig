@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cart{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="text-center mt-4 mb-4">Cart</h1>
+        <table  class="table table-striped table-dark">
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total price</th>
+                <th>Action</th>
+            </tr>
+            {% for item in items %}
+                <tr>
+                    <td>{{item.product.name}}</td>
+                    <td>{{item.product.price}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.product.price * item.quantity}}</td>
+                    <td>
+                        <a href="{{ path('app_cart_product_remove', {'id': item.product.id}) }}" class="text-danger text-decoration-none">Remove from cart</a>
+                    </td>
+                </tr>
+            {% else %}
+                <p>Your cart is empty</p>
+            {% endfor %}
+        </table>
+        {% if total > 0 %}
+            <h2 class="text-end">Total : {{total}}€</h2>
+            <div class="row center" >
+                <a href="" class="btn btn-primary w-25" data-turbo="false">Confirm the order</a>
+                <a href="{{ path('app_cart_delete') }}" class="btn btn-outline-dark w-25">Delete the cart</a>
+            </div>
+        {% endif %}
+        
+    </div>
+{% endblock %}
