@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <h1 class="text-center mt-4 mb-4" >Order</h1>
+                {{ form_start(form) }}
+                    <input type="submit" value="Continue" class="btn btn-outline-light mb-3">
+                {{ form_end(form) }}
+            </div>
+            <div class="col-4 mt-5">
+                {# <h3>Amount to pay: {{total}}€</h3> #}
+                <span class="mb-2">Amount to pay :</span>
+                <h3>
+                    <span id="card-price">{{total}}</span>€
+                </h3>
+                <span>Delivery fees</span>
+            </div>
+        </div>
+    </div>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(function(){
+                const citySelector = $('#order_city'); //selectionne la balise html qui a pour id order_city et on le stock dans la const
+                const cityValue = citySelector.val(); //recupere la valeur donné dans les villes qui peuvent etre selectionnées
+            })
+        </script>
+{% endblock %}
