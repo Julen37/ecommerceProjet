@@ -12,8 +12,16 @@ class CityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('shippingCost')
+            ->add('name', null, [
+                'required'=>'true',
+                'label'=>'Name of the city', 
+                'attr'=>['class'=>'form form-control mb-2 mt-1', 'placeholder'=>'Name of the city']
+            ])
+            ->add('shippingCost', null, [
+                'required'=>'true',
+                'label'=>'Shipping cost', 
+                'attr'=>['class'=>'form form-control mb-2 mt-1', 'placeholder'=>'Shipping cost']
+            ])
         ;
     }
 

@@ -3,9 +3,9 @@
 {% block title %}New City{% endblock %}
 
 {% block body %}
-    <h1>Create new City</h1>
-
+<div class="container productForm">
+    <h1 class="text-center mt-4 mb-4">Create new City</h1>
+    <a href="{{ path('app_city_index') }}" class="btn btn-outline-light mb-2">Back to list</a>
     {{ include('city/_form.html.twig') }}
-
-    <a href="{{ path('app_city_index') }}">back to list</a>
+</div>
 {% endblock %}

@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/city')]
+
+#[Route('/editor/city')]
 final class CityController extends AbstractController
 {
     #[Route(name: 'app_city_index', methods: ['GET'])]

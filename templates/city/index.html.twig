@@ -3,35 +3,35 @@
 {% block title %}City index{% endblock %}
 
 {% block body %}
-    <h1>City index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>ShippingCost</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for city in cities %}
-            <tr>
-                <td>{{ city.id }}</td>
-                <td>{{ city.name }}</td>
-                <td>{{ city.shippingCost }}</td>
-                <td>
-                    <a href="{{ path('app_city_show', {'id': city.id}) }}">show</a>
-                    <a href="{{ path('app_city_edit', {'id': city.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_city_new') }}">Create new</a>
+    <div class="container">
+        <h1 class="text-center mt-4 mb-4">City</h1>
+        <a href="{{ path('app_city_new') }}" class="btn btn-success mb-3">Create new</a>
+        <table class="table table-striped table-dark">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Shipping Cost</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for city in cities %}
+                <tr>
+                    <td>{{ city.id }}</td>
+                    <td>{{ city.name }}</td>
+                    <td>{{ city.shippingCost }}</td>
+                    <td>
+                        <a href="{{ path('app_city_show', {'id': city.id}) }}" class="btn btn-outline-success mb-2">Show</a>
+                        <a href="{{ path('app_city_edit', {'id': city.id}) }}" class="btn btn-outline-warning mb-2">Modify</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
