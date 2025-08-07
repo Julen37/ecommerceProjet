@@ -12,37 +12,51 @@
                 {{ form_end(form) }}
             </div>
             <div class="col-4 mt-5">
-                {# <h3>Amount to pay: {{total}}€</h3> #}
                 <span class="mb-2">Amount to pay :</span>
                 <h3>
-                    <span id="card-price">{{total}}</span>€
+                    <span id="card-price">{{total}}</span>
+                    €
                 </h3>
-                <span>Delivery fees</span>
+                <span>Delivery fees :</span>
                 <h3>
-                    <span id="shippingCost"></span>€
+                    <span id="shippingCost"></span>
+                    €
+                </h3>
+                <span>Total price to pay :</span>
+                <h3>
+                    <span class="total-price"></span>
+                    €
                 </h3>
             </div>
         </div>
     </div>
+{# --------------------------------------------------------jquery-------------------------------------------------------- #}
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         <script>
-            $(document).ready(function(){
-                const citySelector = $('#order_city'); //selectionne la balise html qui a pour id order_city et on le stock dans la const
+            $(document).ready(function(){ //quand le document est chargé ca commencera la fonction
+                const citySelector = $('#order_city'); //selectionne l'element html qui a pour id order_city et on le stock dans la const
                 const cityValue = citySelector.val(); //recupere la valeur donné dans les villes qui peuvent etre selectionnées dans la liste deroulante
          
-                const url = `/city/${cityValue}/shipping/cost`; // on a enlevé le localhost:8000 sinon ca fonctionne pas
+                const url = `/city/${cityValue}/shipping/cost`; // on a enlevé le localhost:8000 sinon ca fonctionne pas / defini l'url de la requete en fonction de la ville qui est selectionnée aka l'id de la ville
 
                 function ajaxRequest(url) {
                     $.ajax({
                         url:url,
                         type:'GET',
+
                         success:function(response){
                             const newResponse = JSON.parse(response)
                             if (parseInt(newResponse.status) == 200){
                                 console.log(newResponse.status)
                                 $("#shippingCost").text(newResponse.content)
+
+                                const cardPrice = parseInt($('#card-price').text());
+                                const shippingCost = parseInt($('#shippingCost').text());
+                                $('.total-price').text(cardPrice + shippingCost);
+
                             }
                         },
+
                         error:function(xhr,status,error){
 
                         },
@@ -52,11 +66,11 @@
 
                 ajaxRequest(url)
 
-                citySelector.on('change', function(){ //refresh quand on change de ville
-                    const newUrl = `/city/${$(this).val()}/shipping/cost`;
-                    ajaxRequest(newUrl)
+                citySelector.on('change', function(){ //refresh la data quand on change de ville
+                    const urlUpdate = `/city/${$(this).val()}/shipping/cost`;
+                    ajaxRequest(urlUpdate)
                 })
-
             })
+//voir github jeremie si on veut pareil mais en javascript vanilla
         </script>
 {% endblock %}
