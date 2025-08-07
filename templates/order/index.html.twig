@@ -29,11 +29,30 @@
             $(document).ready(function(){
                 const citySelector = $('#order_city'); //selectionne la balise html qui a pour id order_city et on le stock dans la const
                 const cityValue = citySelector.val(); //recupere la valeur donné dans les villes qui peuvent etre selectionnées dans la liste deroulante
-            
-                const url = 'http://127.0.0.1:8000/city/${cityValue}/shipping/cost';
+         
+                const url = `/city/${cityValue}/shipping/cost`;
 
                 $.ajax({
                     url:url,
+                    type:'GET',
+                    success:function(response){
+                        const newResponse = JSON.parse(response)
+                        if (parseInt(newResponse.status) == 200){
+                            console.log(newResponse.status)
+                            $("#shippingCost").text(newResponse.content)
+                        }
+                    },
+                    error:function(xhr,status,error){
+
+                    },
+
+                })
+                citySelector.on('change', function(){ //refresh quand on change de ville
+                    const newCityValue = $(this).val();
+                    const newUrl = `/city/${newCityValue}/shipping/cost`;
+                    
+                    $.ajax({
+                    url:newUrl,
                     type:'GET',
                     success:function(response){
                         const newResponse = JSON.parse(response)
@@ -45,7 +64,10 @@
                     error:function(xhr,status,error){
 
                     },
+
                 })
+                })
+
             })
         </script>
 {% endblock %}
