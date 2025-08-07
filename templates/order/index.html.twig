@@ -30,42 +30,31 @@
                 const citySelector = $('#order_city'); //selectionne la balise html qui a pour id order_city et on le stock dans la const
                 const cityValue = citySelector.val(); //recupere la valeur donné dans les villes qui peuvent etre selectionnées dans la liste deroulante
          
-                const url = `/city/${cityValue}/shipping/cost`;
+                const url = `/city/${cityValue}/shipping/cost`; // on a enlevé le localhost:8000 sinon ca fonctionne pas
 
-                $.ajax({
-                    url:url,
-                    type:'GET',
-                    success:function(response){
-                        const newResponse = JSON.parse(response)
-                        if (parseInt(newResponse.status) == 200){
-                            console.log(newResponse.status)
-                            $("#shippingCost").text(newResponse.content)
-                        }
-                    },
-                    error:function(xhr,status,error){
-
-                    },
-
-                })
-                citySelector.on('change', function(){ //refresh quand on change de ville
-                    const newCityValue = $(this).val();
-                    const newUrl = `/city/${newCityValue}/shipping/cost`;
-                    
+                function ajaxRequest(url) {
                     $.ajax({
-                    url:newUrl,
-                    type:'GET',
-                    success:function(response){
-                        const newResponse = JSON.parse(response)
-                        if (parseInt(newResponse.status) === 200){
-                            console.log(newResponse.status)
-                            $("#shippingCost").text(newResponse.content)
-                        }
-                    },
-                    error:function(xhr,status,error){
+                        url:url,
+                        type:'GET',
+                        success:function(response){
+                            const newResponse = JSON.parse(response)
+                            if (parseInt(newResponse.status) == 200){
+                                console.log(newResponse.status)
+                                $("#shippingCost").text(newResponse.content)
+                            }
+                        },
+                        error:function(xhr,status,error){
 
-                    },
+                        },
 
-                })
+                    })
+                }
+
+                ajaxRequest(url)
+
+                citySelector.on('change', function(){ //refresh quand on change de ville
+                    const newUrl = `/city/${$(this).val()}/shipping/cost`;
+                    ajaxRequest(newUrl)
                 })
 
             })
