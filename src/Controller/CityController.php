@@ -23,6 +23,7 @@ final class CityController extends AbstractController
         ]);
     }
 
+#region NEW
     #[Route('/new', name: 'app_city_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -50,7 +51,9 @@ final class CityController extends AbstractController
             'city' => $city,
         ]);
     }
+#endregion NEW
 
+#region EDIT
     #[Route('/{id}/edit', name: 'app_city_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, City $city, EntityManagerInterface $entityManager): Response
     {
@@ -68,7 +71,9 @@ final class CityController extends AbstractController
             'form' => $form,
         ]);
     }
+#endregion EDIT
 
+#region DELETE  
     #[Route('/{id}', name: 'app_city_delete', methods: ['POST'])]
     public function delete(Request $request, City $city, EntityManagerInterface $entityManager): Response
     {
@@ -79,4 +84,6 @@ final class CityController extends AbstractController
 
         return $this->redirectToRoute('app_city_index', [], Response::HTTP_SEE_OTHER);
     }
+#endregion DELETE
+
 }

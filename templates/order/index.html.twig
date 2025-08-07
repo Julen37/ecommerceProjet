@@ -18,6 +18,9 @@
                     <span id="card-price">{{total}}</span>€
                 </h3>
                 <span>Delivery fees</span>
+                <h3>
+                    <span id="shippingCost"></span>€
+                </h3>
             </div>
         </div>
     </div>
@@ -25,7 +28,24 @@
         <script>
             $(document).ready(function(){
                 const citySelector = $('#order_city'); //selectionne la balise html qui a pour id order_city et on le stock dans la const
-                const cityValue = citySelector.val(); //recupere la valeur donné dans les villes qui peuvent etre selectionnées
+                const cityValue = citySelector.val(); //recupere la valeur donné dans les villes qui peuvent etre selectionnées dans la liste deroulante
+            
+                const url = 'http://127.0.0.1:8000/city/${cityValue}/shipping/cost';
+
+                $.ajax({
+                    url:url,
+                    type:'GET',
+                    success:function(response){
+                        const newResponse = JSON.parse(response)
+                        if (parseInt(newResponse.status) === 200){
+                            console.log(newResponse.status)
+                            $("#shippingCost").text(newResponse.content)
+                        }
+                    },
+                    error:function(xhr,status,error){
+
+                    },
+                })
             })
         </script>
 {% endblock %}
