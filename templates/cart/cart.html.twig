@@ -30,7 +30,7 @@
         {% if total > 0 %}
             <h2 class="text-end">Total : {{total}}€</h2>
             <div class="row center" >
-                <a href="" class="btn btn-primary w-25" data-turbo="false">Confirm the order</a>
+                <a href="{{ path('app_order') }}" class="btn btn-primary w-25" data-turbo='false'>Confirm the order</a>
                 <a href="{{ path('app_cart_delete') }}" class="btn btn-outline-dark w-25">Delete the cart</a>
             </div>
         {% endif %}
