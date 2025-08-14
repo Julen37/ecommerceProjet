@@ -57,12 +57,19 @@ final class CartController extends AbstractController
        
         $cart = $session->get('cart',[]);
         
+        // if (!empty($cart[$id])){
+        //     unset($cart[$id]); 
+        // }
         if (!empty($cart[$id])){
-            unset($cart[$id]); 
-        }
+            if ($cart[$id] > 1){
+                $cart[$id]--;
+            }else{
+                unset($cart[$id]);
+            }
 
-        $session->set('cart', $cart); 
-      
+            $session->set('cart', $cart); 
+        }
+        
         return $this->redirectToRoute('app_cart');
     }
 #endregion REMOVE TO CART
@@ -72,6 +79,7 @@ final class CartController extends AbstractController
     public function deleteCart(SessionInterface $session): Response
     {
         $session->set('cart', []); 
+        // $cart = $session->remove('cart', []);
       
         return $this->redirectToRoute('app_cart');
     }

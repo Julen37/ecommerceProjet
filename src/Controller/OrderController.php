@@ -17,30 +17,46 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 final class OrderController extends AbstractController
 {
     #[Route('/order', name: 'app_order')]
-    public function index(Request $request, SessionInterface $session, ProductRepository $productRepo, 
-                            EntityManagerInterface $entityManager, Cart $cart): Response
+    public function index(Request $request, 
+                          SessionInterface $session, 
+                          ProductRepository $productRepo, 
+                          EntityManagerInterface $entityManager, 
+                          Cart $cart): Response
     {
+
+        $data = $cart->getCart($session);
         $order =new Order();
         $form =$this->createForm(OrderType::class, $order);
         $form->handleRequest($request);
 
-        $cart = $session->get('cart',[]);
-        $cartWithData = [];
-        foreach ($cart as $id => $quantity) {
-            $cartWithData[] =[
-                'product' => $productRepo->find($id), 
-                'quantity' => $quantity 
-            ];
+        if ($form->isSubmitted() && $form->isValid()){
+            if($order->isPayOnDelivery()) {
+                $order->setTotalPrice($data['total']);
+                $order->setCreatedAt(new \DateTimeImmutable());
+                $entityManager->persist($order);
+                $entityManager->flush();
+            }
         }
 
-        $total = array_sum(array_map(function ($item) { 
-            // pour chaque elements du panier, multiplie le prix du produit par la quantité
-            return $item['product']->getPrice() * $item['quantity'];
-        }, $cartWithData));
+
+        // $cart = $session->get('cart',[]);
+        // $cartWithData = [];
+        // foreach ($cart as $id => $quantity) {
+        //     $cartWithData[] =[
+        //         'product' => $productRepo->find($id), 
+        //         'quantity' => $quantity 
+        //     ];
+        // }
+
+        // $total = array_sum(array_map(function ($item) { 
+        //     // pour chaque elements du panier, multiplie le prix du produit par la quantité
+        //     return $item['product']->getPrice() * $item['quantity'];
+        // }, $cartWithData));
 
         return $this->render('order/index.html.twig', [
             'form'=>$form->createView(),
-            'total'=> $total,
+            // 'total'=> $total,
+            'total'=>$data['total'],
         ]);
     }
 
