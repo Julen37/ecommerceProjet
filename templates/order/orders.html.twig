@@ -7,7 +7,7 @@
         <h1 class="text-center mt-4 mb-4" >Orders</h1>
         {% include 'layouts/_flash_message.html.twig'%}
         {% for order in orders %}
-            <h2>Commande n° {{ order.id }}</h2>
+            <h2>Order n° {{ order.id }}</h2>
             {% if order.isCompleted ==true %}
                 <span class='text-light'>🗸 Order delivered : {{ order.createdAt|date }}</span>
             {% else %}
@@ -49,7 +49,8 @@
                 {% endfor %}
             </table>  
             <span>Delivery fees: {{ order.city.shippingCost }} €</span>
-            <h5 class='mb-5'>Total to pay : {{ order.totalPrice }} €</h5>
+            <h5 class='mb-5'>Total to pay : {{ order.totalPrice + order.city.shippingCost }} €</h5>
+            <a  href="{{ path('app_bill', {'id':order.id}) }}" class='btn btn-light col-2 m-lg-1'>Print the bill</a>
             {% if order.isCompleted != true %}
                 <a onclick="return confirm ('Do you really want to mark as delivered ?')" href="{{ path('app_orders_is-completed-update', {'id':order.id}) }}" class='btn btn-primary col-2 m-lg-1'>Mark as delivered</a>
             {% endif %}
