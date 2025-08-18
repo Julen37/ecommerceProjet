@@ -4,12 +4,13 @@ namespace App\Controller;
 
 use App\Entity\City;
 use App\Entity\Order;
-use App\Entity\OrderProducts;
+use App\Service\Cart;
 use App\Form\OrderType;
+use App\Entity\OrderProducts;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
-use App\Service\Cart;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -94,12 +95,17 @@ final class OrderController extends AbstractController
     }
 
     #[Route('/editor/order', name: 'app_orders_show')] 
-    public function getAllOrder(OrderRepository $orderRepo): Response
+    public function getAllOrder(OrderRepository $orderRepo,  PaginatorInterface $paginator, Request $request): Response
     {
         $orders= $orderRepo->findAll();
+        $orderKnp =$paginator->paginate(
+            $orders,
+            $request->query->getInt('page', 1),
+            5
+        );
 
         return $this->render('order/orders.html.twig', [
-            'orders'=>$orders,
+            'orders'=>$orderKnp,
         ]);
     }
 }
