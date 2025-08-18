@@ -27,7 +27,7 @@ final class CategoryController extends AbstractController
         ]);
     }
 
-    // NEW CATEGORY
+#region NEW CATEGORY
     #[Route('/categoryNew', name: 'app_category_new')]
     #[IsGranted("ROLE_ADMIN")]
     public function addCategory(Request $request, EntityManagerInterface $entityManager): Response
@@ -52,7 +52,7 @@ final class CategoryController extends AbstractController
         ]);
     }
 
-    // UPDATE
+#region UPDATE
     #[Route('/categoryUpdate/{id}', name: 'app_category_update')] 
     #[IsGranted("ROLE_ADMIN")]
     public function update_form(Request $request, EntityManagerInterface $entityManager, Category $category): Response 
@@ -74,7 +74,7 @@ final class CategoryController extends AbstractController
         ]);
     }
 
-    //DELETE
+#region DELETE
     #[Route('/categoryDelete/{id}', name: 'app_category_delete')] 
     #[IsGranted("ROLE_ADMIN")]
     public function delete_form(EntityManagerInterface $entityManager, Category $category): Response 

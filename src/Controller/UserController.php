@@ -24,7 +24,7 @@ final class UserController extends AbstractController
         ]);
     }
 
-    // UPDATE ROLE - EDITOR / USER
+#region UPDATE ROLE - EDITOR
     #[Route('/user/role/update/{id}', name: 'app_user_update_role')] 
     #[IsGranted("ROLE_ADMIN")]
     public function updateRoleEditor(EntityManagerInterface $entityManager, User $user): Response
@@ -37,7 +37,7 @@ final class UserController extends AbstractController
         return $this->redirectToRoute('app_user'); 
     }
 
-   // DELETE ROLE - EDITOR 
+#region DELETE ROLE - EDITOR 
     #[Route('/user/role/delete/{id}', name: 'app_user_delete_role')] 
     #[IsGranted("ROLE_ADMIN")]
     public function deleteRoleEditor(EntityManagerInterface $entityManager, User $user): Response
@@ -50,7 +50,7 @@ final class UserController extends AbstractController
         return $this->redirectToRoute('app_user'); 
     }
 
-    // DELETE USER
+#region DELETE USER
     #[Route('/user/delete/{id}', name: 'app_user_delete_user')] 
     #[IsGranted("ROLE_ADMIN")]
     public function deleteUser($id, EntityManagerInterface $entityManager, UserRepository $userRepo): Response 

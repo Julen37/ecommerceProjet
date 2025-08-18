@@ -19,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class OrderController extends AbstractController
 {
+#region ORDER
     #[Route('/order', name: 'app_order')]
     public function index(Request $request, 
                           SessionInterface $session, 
@@ -58,7 +59,6 @@ final class OrderController extends AbstractController
             }
         }
 
-
         // $cart = $session->get('cart',[]);
         // $cartWithData = [];
         // foreach ($cart as $id => $quantity) {
@@ -79,13 +79,17 @@ final class OrderController extends AbstractController
             'total'=>$data['total'],
         ]);
     }
+#endregion ORDER
 
+#region MESSAGE OK
     #[Route('/order_message', name: 'order_message')] 
     public function orderMessage(): Response
     {
         return $this->render('order/order_message.html.twig');
     }
+#endregion MESSAGE
 
+#region CITY COST
     #[Route('/city/{id}/shipping/cost', name: 'app_city_shipping_cost')]
     public function cityShippingCost(City $city): Response
     {
@@ -93,7 +97,9 @@ final class OrderController extends AbstractController
 
         return new Response(json_encode(['status'=>200, 'message'=>'on', 'content'=>$cityShippingPrice]));
     }
+#endregion CITY COST
 
+#region EDITOR ORDERS
     #[Route('/editor/order', name: 'app_orders_show')] 
     public function getAllOrder(OrderRepository $orderRepo,  PaginatorInterface $paginator, Request $request): Response
     {
@@ -108,7 +114,9 @@ final class OrderController extends AbstractController
             'orders'=>$orderKnp,
         ]);
     }
+#endregion EDITOR ORDERS
 
+#region UPDATE 
     #[Route('/editor/order/{id}/is-completed/update', name: 'app_orders_is-completed-update')] 
     public function isCompletedUpdate($id, OrderRepository $orderRepo, EntityManagerInterface $entityManager): Response
     {
@@ -118,7 +126,9 @@ final class OrderController extends AbstractController
         $this->addFlash('success', 'The order have been updated !');
         return $this->redirectToRoute('app_orders_show');
     }
+#endregion UPDATE
 
+#region DELETE
     #[Route('/editor/order/{id}/remove', name: 'app_orders_remove')] 
     public function removeOrder(Order $order, EntityManagerInterface $entityManager): Response
     {
@@ -127,4 +137,5 @@ final class OrderController extends AbstractController
         $this->addFlash('danger', 'The order have been deleted.');
         return $this->redirectToRoute('app_orders_show');
     }
+#endregion DELETE
 }
