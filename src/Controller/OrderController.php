@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\City;
 use App\Entity\Order;
+use App\Entity\OrderProducts;
 use App\Form\OrderType;
+use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Service\Cart;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,10 +33,27 @@ final class OrderController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()){
             if($order->isPayOnDelivery()) {
-                $order->setTotalPrice($data['total']);
-                $order->setCreatedAt(new \DateTimeImmutable());
-                $entityManager->persist($order);
-                $entityManager->flush();
+
+                if(!empty($data['total'])) {
+                    $order->setTotalPrice($data['total']);
+                    $order->setCreatedAt(new \DateTimeImmutable());
+                    $entityManager->persist($order);
+                    $entityManager->flush();
+                    // dd($data['cart']); //voir ce qu'il y a dans une variable -> var dump and die
+
+                    foreach($data['cart'] as $value) { // pour chaque elements dans le panier
+                        $orderProduct = new OrderProducts(); 
+                        $orderProduct->setOrder($order); 
+                        $orderProduct->setProduct($value['product']); 
+                        $orderProduct->setQuantity($value['quantity']);
+                        $entityManager->persist($orderProduct);
+                        $entityManager->flush();
+                    }
+                }
+
+                $session->set('cart', []);
+
+                return $this->redirectToRoute('order_message');
             }
         }
 
@@ -60,6 +79,11 @@ final class OrderController extends AbstractController
         ]);
     }
 
+    #[Route('/order_message', name: 'order_message')] 
+    public function orderMessage(): Response
+    {
+        return $this->render('order/order_message.html.twig');
+    }
 
     #[Route('/city/{id}/shipping/cost', name: 'app_city_shipping_cost')]
     public function cityShippingCost(City $city): Response
@@ -67,5 +91,15 @@ final class OrderController extends AbstractController
         $cityShippingPrice = $city->getShippingCost();
 
         return new Response(json_encode(['status'=>200, 'message'=>'on', 'content'=>$cityShippingPrice]));
+    }
+
+    #[Route('/editor/order', name: 'app_orders_show')] 
+    public function getAllOrder(OrderRepository $orderRepo): Response
+    {
+        $orders= $orderRepo->findAll();
+
+        return $this->render('order/orders.html.twig', [
+            'orders'=>$orders,
+        ]);
     }
 }
