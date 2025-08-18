@@ -21,11 +21,11 @@ final class BillController extends AbstractController
         $domPdf = new Dompdf($pdfOptions);
         $html = $this->renderView('bill/index.html.twig', [
             'order'=>$order,
-        ]);
-        $domPdf->loadHtml($html);
-        $domPdf->render();
-        $domPdf->stream('bill-'.$order->getId().'.pdf',[
-            'Attachment'=>false
+        ]); // On insere ce que l'on veut imprimer
+        $domPdf->loadHtml($html);  // On charge le html dans dompdf
+        $domPdf->render(); //On crée le rendu
+        $domPdf->stream('bill-'.$order->getId().'.pdf',[ //On concatene la facture avec la terminaison"pdf"
+            'Attachment'=>false, //ca permet de dire on va telecharger le fichier, ou l'afficher et decider de l'imprimer et telecharger
         ]);
 
         return new Response('', 200,[
