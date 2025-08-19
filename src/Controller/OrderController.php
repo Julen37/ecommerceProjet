@@ -10,6 +10,7 @@ use App\Entity\OrderProducts;
 use Symfony\Component\Mime\Email;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
+use App\Service\StripePayment;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,6 +77,12 @@ class OrderController extends AbstractController
 
                 return $this->redirectToRoute('app_order_message');
             }
+            $paymentStripe = new StripePayment(); // on importe notre service stripe avec sa classe
+            $shippingCost = $order->getCity()->getShippingCost();
+            $paymentStripe->startPayment($data, $shippingCost); // on importe le panier donc $data
+            $stripeRedirectUrl = $paymentStripe->getStripeRedirectUrl();
+            // dd( $stripeRedirectUrl);
+            return $this->redirect($stripeRedirectUrl);
         }
 
         // $cart = $session->get('cart',[]);
