@@ -50,7 +50,7 @@
             </table>  
             <span>Delivery fees: {{ order.city.shippingCost }} €</span>
             <h5 class='mb-5'>Total to pay : {{ order.totalPrice + order.city.shippingCost }} €</h5>
-            <a  href="{{ path('app_bill', {'id':order.id}) }}" class='btn btn-light col-2 m-lg-1'>Print the bill</a>
+            <a  href="{{ path('app_bill', {'id':order.id}) }}" class='btn btn-light col-2 m-lg-1' target="_blank">Print the bill</a>
             {% if order.isCompleted != true %}
                 <a onclick="return confirm ('Do you really want to mark as delivered ?')" href="{{ path('app_orders_is-completed-update', {'id':order.id}) }}" class='btn btn-primary col-2 m-lg-1'>Mark as delivered</a>
             {% endif %}
