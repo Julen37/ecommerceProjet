@@ -22,6 +22,10 @@ class OrderType extends AbstractType
                 'required'=>'true',
                 'attr'=>['class'=>'form form-control mb-2 mt-1', 'placeholder'=>'Last name']
             ])
+            ->add('email', null, [
+                'required'=>'true',
+                'attr'=>['class'=>'form form-control mb-2 mt-1', 'placeholder'=>'Email']
+            ])
             ->add('phone', null, [
                 'required'=>'true',
                 'attr'=>['class'=>'form form-control mb-2 mt-1', 'placeholder'=>'Phone number']

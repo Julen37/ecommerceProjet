@@ -16,9 +16,9 @@ final class BillController extends AbstractController
     {
         $order = $orderRepo->find($id);
 
-        $pdfOptions = new Options();
-        $pdfOptions->set('defaultFont', 'Arial');
-        $domPdf = new Dompdf($pdfOptions);
+        $pdfOptions = new Options(); //definit la nouvelle instanciation de classe Options de Dompdf
+        $pdfOptions->set('defaultFont', 'Arial'); // définit le font
+        $domPdf = new Dompdf($pdfOptions); // on ajoute les options
         $html = $this->renderView('bill/index.html.twig', [
             'order'=>$order,
         ]); // On insere ce que l'on veut imprimer

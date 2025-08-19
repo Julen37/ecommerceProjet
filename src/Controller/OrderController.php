@@ -7,6 +7,7 @@ use App\Entity\Order;
 use App\Service\Cart;
 use App\Form\OrderType;
 use App\Entity\OrderProducts;
+use Symfony\Component\Mime\Email;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,9 +17,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\MailerInterface;
 
-final class OrderController extends AbstractController
+class OrderController extends AbstractController
 {
+    public function __construct(private MailerInterface $mailer){
+    }
+
+
+// final class OrderController extends AbstractController
+// {
 #region ORDER
     #[Route('/order', name: 'app_order')]
     public function index(Request $request, 
@@ -53,9 +61,20 @@ final class OrderController extends AbstractController
                     }
                 }
 
-                $session->set('cart', []);
+                $session->set('cart', []); // mise a jour du contenu du panier apres avoir flush
 
-                return $this->redirectToRoute('order_message');
+                $html = $this->renderView('mail/orderConfirm.html.twig', [ //crée une nouvelle vue mail
+                    'order'=>$order, // on recupere le $order apres le flush donc on a toute les infos
+                ]);
+                $email = (new Email()) //on importe la classe depuis symfony\component\mime\email
+                ->from('booksite@gmail.com') // mail de l'expediteur donc notre boutique ou nous meme
+                // ->to('to@gmail.com') // mail du receveur
+                ->to($order->getEmail())
+                ->subject('Order confirmation') // intitulé du mail
+                ->html($html);
+                $this->mailer->send($email);
+
+                return $this->redirectToRoute('app_order_message');
             }
         }
 
@@ -82,7 +101,7 @@ final class OrderController extends AbstractController
 #endregion ORDER
 
 #region MESSAGE OK
-    #[Route('/order_message', name: 'order_message')] 
+    #[Route('/order_message', name: 'app_order_message')] 
     public function orderMessage(): Response
     {
         return $this->render('order/order_message.html.twig');

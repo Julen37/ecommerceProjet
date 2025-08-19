@@ -1,0 +1,31 @@
+{% block body %}
+    <div class="container">
+        <h1>Confirmation of the order n° {{ order.id }}</h1>
+        <span>Date of the order : {{ order.createdAt|date }}</span>
+        <p>Thank you for your order, it will be processed as soon as possible</p>
+        <h5 class='text-primary mt-5'>Details of the order</h5>
+        
+        <br><br><br>
+        <span>Delivery fees : {{ order.city.shippingCost }} €</span>
+        <hr>
+        <h3 class='mb-5'>Total to pay : {{ order.totalPrice + order.city.shippingCost}} €</h3>        
+    </div>
+{% endblock %}
+<style>
+    table{
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td{
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    thead{
+        background: #f2f2f2;
+    }
+    tbody tr:nth-child(odd){
+        background: #f9f9f9
+    }
+
+</style>

@@ -18,14 +18,17 @@
                 <th>City</th>
             </tr>
         </thead>
-        <tr>
-            <td>{{ order.firstName }} </td>
-            <td>{{ order.lastName }} </td>
-            <td>{{ order.phone }} </td>
-            <td>{{ order.address }} </td>
-            <td>{{ order.city.name}} </td>
-        </tr>
+        <tbody>
+            <tr>
+                <td>{{ order.firstName }} </td>
+                <td>{{ order.lastName }} </td>
+                <td>{{ order.phone }} </td>
+                <td>{{ order.address }} </td>
+                <td>{{ order.city.name}} </td>
+            </tr>
+        </tbody>
         </table>
+        <br>
         <span class='text-primary'>Body of the order</span>
         <table class="table table-bordered">
             <thead>
