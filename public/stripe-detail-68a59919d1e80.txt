@@ -1,0 +1,68 @@
+Stripe\PaymentIntent JSON: {
+    "id": "pi_3Ry8ZgJRZA9qVgZR0Zjql73r",
+    "object": "payment_intent",
+    "amount": 6700,
+    "amount_capturable": 0,
+    "amount_details": {
+        "tip": []
+    },
+    "amount_received": 6700,
+    "application": null,
+    "application_fee_amount": null,
+    "automatic_payment_methods": null,
+    "canceled_at": null,
+    "cancellation_reason": null,
+    "capture_method": "automatic_async",
+    "client_secret": "pi_3Ry8ZgJRZA9qVgZR0Zjql73r_secret_Y9kJFS7HPXJsBtczU8gudz5FI",
+    "confirmation_method": "automatic",
+    "created": 1755683096,
+    "currency": "eur",
+    "customer": null,
+    "description": null,
+    "excluded_payment_method_types": null,
+    "last_payment_error": null,
+    "latest_charge": "ch_3Ry8ZgJRZA9qVgZR0BmFaFeb",
+    "livemode": false,
+    "metadata": {
+        "orderid": "23"
+    },
+    "next_action": null,
+    "on_behalf_of": null,
+    "payment_method": "pm_1Ry8ZfJRZA9qVgZR7T0UxWHV",
+    "payment_method_configuration_details": null,
+    "payment_method_options": {
+        "card": {
+            "installments": null,
+            "mandate_options": null,
+            "network": null,
+            "request_three_d_secure": "automatic"
+        }
+    },
+    "payment_method_types": [
+        "card"
+    ],
+    "processing": null,
+    "receipt_email": null,
+    "review": null,
+    "setup_future_usage": null,
+    "shipping": {
+        "address": {
+            "city": "Bordeaux",
+            "country": "FR",
+            "line1": "'tt\"t\"",
+            "line2": null,
+            "postal_code": "30000",
+            "state": null
+        },
+        "carrier": null,
+        "name": "julen gou",
+        "phone": null,
+        "tracking_number": null
+    },
+    "source": null,
+    "statement_descriptor": null,
+    "statement_descriptor_suffix": null,
+    "status": "succeeded",
+    "transfer_data": null,
+    "transfer_group": null
+}

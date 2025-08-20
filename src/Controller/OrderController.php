@@ -79,7 +79,7 @@ class OrderController extends AbstractController
                 }
             $paymentStripe = new StripePayment(); // on importe notre service stripe avec sa classe
             $shippingCost = $order->getCity()->getShippingCost();
-            $paymentStripe->startPayment($data, $shippingCost); // on importe le panier donc $data
+            $paymentStripe->startPayment($data, $shippingCost, $order->getId()); // on importe le panier donc $data
             $stripeRedirectUrl = $paymentStripe->getStripeRedirectUrl();
             // dd( $stripeRedirectUrl);
             return $this->redirect($stripeRedirectUrl);

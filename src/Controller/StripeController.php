@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Repository\OrderRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Stripe;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +29,9 @@ final class StripeController extends AbstractController
     }
 
     #[Route('/stripe/notify', name: 'app_stripe_notify')]
-    public function stripeNotify(Request $request): Response
+    public function stripeNotify(Request $request, 
+                                OrderRepository $orderRepo,
+                                EntityManagerInterface $entityManager): Response
     {
         Stripe::setApiKey($_SERVER['STRIPE_SECRET_KEY']);
         file_put_contents("log.txt", ""); 
@@ -42,8 +46,10 @@ final class StripeController extends AbstractController
                 $payload, $sigHeader, $endpoint_secret
             );
         file_put_contents("log.txt", "try ok", FILE_APPEND);
+
         } catch(\UnexpectedValueException $e){
             return new Response('Invalid payload', 400);
+
         } catch(\Stripe\Exception\SignatureVerificationException $e){
             return new Response('Invalid signature', 400);
         }
@@ -54,6 +60,14 @@ final class StripeController extends AbstractController
 
                 $fileName = 'stripe-detail-'.uniqid().'.txt';
                 file_put_contents($fileName, $paymentIntent);
+
+                $orderId = $paymentIntent->metadata->orderid;
+                $order = $orderRepo->find($orderId);
+                $order->setIsPaymentCompleted(true);
+                // file_put_contents($fileName, $orderId);
+
+                $entityManager->flush();
+
                 break;
             case 'payment_method.attached':
                 $paymentMethod =$event->data->object;

@@ -15,7 +15,7 @@ class StripePayment
         Stripe::setApiVersion('2025-07-30.basil');
     }
 
-    public function startPayment($cart, $shippingCost){
+    public function startPayment($cart, $shippingCost, $orderId){
         // dd($cart);
 
         $cartProducts = $cart['cart']; // recuperation des produits du panier
@@ -54,10 +54,13 @@ class StripePayment
             'success_url' => 'http://localhost:8000/pay/success', //si paiement réussi
             'billing_address_collection' => 'required', //si on autorise les factures
             'shipping_address_collection' => [ //pays ou on souhaite autoriser le paiement
-                'allowed_countries' => ['FR','EG'],
+                'allowed_countries' => ['FR'],
             ],   
-            'metadata'=> [
-                // 'order_id'=>$cart->id, //id de la commande
+            'payment_intent_data'=> [
+                'metadata'=> [
+                    // 'order_id'=>$cart->id, //id de la commande
+                'orderid'=>$orderId, 
+                ]
             ]
         ]);
 
