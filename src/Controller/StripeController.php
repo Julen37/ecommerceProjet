@@ -34,10 +34,10 @@ final class StripeController extends AbstractController
                                 EntityManagerInterface $entityManager): Response
     {
         Stripe::setApiKey($_SERVER['STRIPE_SECRET_KEY']);
-        file_put_contents("log.txt", ""); 
+        // file_put_contents("log.txt", ""); 
         $endpoint_secret = $_SERVER['STRIPE_SECRET_KEY_WEBHOOK'];
         $payload = $request->getContent();
-        file_put_contents("log.txt", $payload, FILE_APPEND);
+        // file_put_contents("log.txt", $payload, FILE_APPEND);
         $sigHeader = $request->headers->get('Stripe-Signature');
         $event = null;
 
@@ -45,7 +45,7 @@ final class StripeController extends AbstractController
             $event = \Stripe\Webhook::constructEvent(
                 $payload, $sigHeader, $endpoint_secret
             );
-        file_put_contents("log.txt", "try ok", FILE_APPEND);
+        // file_put_contents("log.txt", "try ok", FILE_APPEND);
 
         } catch(\UnexpectedValueException $e){
             return new Response('Invalid payload', 400);
@@ -53,20 +53,28 @@ final class StripeController extends AbstractController
         } catch(\Stripe\Exception\SignatureVerificationException $e){
             return new Response('Invalid signature', 400);
         }
+        // file_put_contents("log.txt", $event->type, FILE_APPEND);
 
         switch($event->type){
             case 'payment_intent.succeeded':
+                file_put_contents("log.txt", "succeeded", FILE_APPEND);
                 $paymentIntent = $event->data->object;
 
                 $fileName = 'stripe-detail-'.uniqid().'.txt';
-                file_put_contents($fileName, $paymentIntent);
-
+                // file_put_contents($fileName, $paymentIntent);
                 $orderId = $paymentIntent->metadata->orderid;
-                $order = $orderRepo->find($orderId);
-                $order->setIsPaymentCompleted(true);
-                // file_put_contents($fileName, $orderId);
+                // $order = $orderRepo->find($orderId);
+                $order = $orderRepo->findOneBy(["id"=>$orderId]);
 
-                $entityManager->flush();
+                $cartPrice = $order->getTotalPrice();
+                // $stripeTotalAmount = $paymentIntent->amount/100;
+                $stripeTotalAmount = $paymentIntent->amount;
+
+                if($cartPrice*100 == $stripeTotalAmount){
+                    $order->setIsPaymentCompleted(1); // true ou 1 fonctionne ?
+                    // file_put_contents($fileName, $orderId);
+                    $entityManager->flush();
+                }
 
                 break;
             case 'payment_method.attached':

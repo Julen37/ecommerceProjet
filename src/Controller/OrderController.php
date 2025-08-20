@@ -38,14 +38,17 @@ class OrderController extends AbstractController
     {
 
         $data = $cart->getCart($session);
+
         $order =new Order();
+
         $form =$this->createForm(OrderType::class, $order);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-
                 if(!empty($data['total'])) {
-                    $order->setTotalPrice($data['total']);
+                    $totalPrice = $data['total'] + $order->getCity()->getShippingCost();
+
+                    $order->setTotalPrice($totalPrice);
                     $order->setCreatedAt(new \DateTimeImmutable());
                     $order->setIsPaymentCompleted(0);
                     $entityManager->persist($order);
