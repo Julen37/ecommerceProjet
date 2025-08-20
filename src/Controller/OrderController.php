@@ -43,11 +43,11 @@ class OrderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-            if($order->isPayOnDelivery()) {
 
                 if(!empty($data['total'])) {
                     $order->setTotalPrice($data['total']);
                     $order->setCreatedAt(new \DateTimeImmutable());
+                    $order->setIsPaymentCompleted(0);
                     $entityManager->persist($order);
                     $entityManager->flush();
                     // dd($data['cart']); //voir ce qu'il y a dans une variable -> var dump and die
@@ -60,23 +60,23 @@ class OrderController extends AbstractController
                         $entityManager->persist($orderProduct);
                         $entityManager->flush();
                     }
+                    if($order->isPayOnDelivery()){
+                        $session->set('cart', []); // mise a jour du contenu du panier apres avoir flush
+
+                        $html = $this->renderView('mail/orderConfirm.html.twig', [ //crée une nouvelle vue mail
+                            'order'=>$order, // on recupere le $order apres le flush donc on a toute les infos
+                        ]);
+                        $email = (new Email()) //on importe la classe depuis symfony\component\mime\email
+                        ->from('booksite@gmail.com') // mail de l'expediteur donc notre boutique ou nous meme
+                        // ->to('to@gmail.com') // mail du receveur
+                        ->to($order->getEmail())
+                        ->subject('Order confirmation') // intitulé du mail
+                        ->html($html);
+                        $this->mailer->send($email);
+
+                        return $this->redirectToRoute('app_order_message');
+                    }
                 }
-
-                $session->set('cart', []); // mise a jour du contenu du panier apres avoir flush
-
-                $html = $this->renderView('mail/orderConfirm.html.twig', [ //crée une nouvelle vue mail
-                    'order'=>$order, // on recupere le $order apres le flush donc on a toute les infos
-                ]);
-                $email = (new Email()) //on importe la classe depuis symfony\component\mime\email
-                ->from('booksite@gmail.com') // mail de l'expediteur donc notre boutique ou nous meme
-                // ->to('to@gmail.com') // mail du receveur
-                ->to($order->getEmail())
-                ->subject('Order confirmation') // intitulé du mail
-                ->html($html);
-                $this->mailer->send($email);
-
-                return $this->redirectToRoute('app_order_message');
-            }
             $paymentStripe = new StripePayment(); // on importe notre service stripe avec sa classe
             $shippingCost = $order->getCity()->getShippingCost();
             $paymentStripe->startPayment($data, $shippingCost); // on importe le panier donc $data
@@ -84,20 +84,6 @@ class OrderController extends AbstractController
             // dd( $stripeRedirectUrl);
             return $this->redirect($stripeRedirectUrl);
         }
-
-        // $cart = $session->get('cart',[]);
-        // $cartWithData = [];
-        // foreach ($cart as $id => $quantity) {
-        //     $cartWithData[] =[
-        //         'product' => $productRepo->find($id), 
-        //         'quantity' => $quantity 
-        //     ];
-        // }
-
-        // $total = array_sum(array_map(function ($item) { 
-        //     // pour chaque elements du panier, multiplie le prix du produit par la quantité
-        //     return $item['product']->getPrice() * $item['quantity'];
-        // }, $cartWithData));
 
         return $this->render('order/index.html.twig', [
             'form'=>$form->createView(),
