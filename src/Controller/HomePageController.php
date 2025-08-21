@@ -15,9 +15,19 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HomePageController extends AbstractController
 {
     #[Route('/', name: 'app_home_page', methods: ['GET'])]
-    public function homePage(CategoryRepository $categoryRepo, ProductRepository $productRepo, SubCategoryRepository $subcatRepo, Request $request, PaginatorInterface $paginator): Response
+    public function homePage(CategoryRepository $categoryRepo, 
+                            ProductRepository $productRepo, 
+                            SubCategoryRepository $subcatRepo, 
+                            Request $request, 
+                            PaginatorInterface $paginator): Response
     {
     
+        // $p = $productRepo->findByIdUp(10);//rappel de la méthode crée
+        // dd($p);
+
+        // $search = $productRepo->SearchEngine('patrocle');
+        // dd($search);
+
         $data= $productRepo->findby([],['id'=>'DESC']);
         $products =$paginator->paginate(
             $data,

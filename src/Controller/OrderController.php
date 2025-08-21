@@ -152,18 +152,19 @@ class OrderController extends AbstractController
         $order->setIsCompleted(true);
         $entityManager->flush();
         $this->addFlash('success', 'The order have been updated !');
-        return $this->redirect($request->headers->get('referer'));
+        return $this->redirect($request->headers->get('referer')); // redirige a la derniere page consulté
     }
 #endregion UPDATE
 
 #region DELETE
     #[Route('/editor/order/{id}/remove', name: 'app_orders_remove')] 
-    public function removeOrder(Order $order, EntityManagerInterface $entityManager): Response
+    public function removeOrder(Request $request, Order $order, EntityManagerInterface $entityManager): Response
     {
         $entityManager->remove($order);
         $entityManager->flush();
         $this->addFlash('danger', 'The order have been deleted.');
-        return $this->redirectToRoute('app_orders_show');
+        return $this->redirect($request->headers->get('referer'));
+        // return $this->redirectToRoute('app_orders_show');
     }
 #endregion DELETE
 }
