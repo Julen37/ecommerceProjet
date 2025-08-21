@@ -9,12 +9,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class StripeController extends AbstractController
 {
     #[Route('/pay/success', name: 'app_stripe_success')]
-    public function success(): Response
+    public function success(SessionInterface $session): Response
     {
+        $session->set('cart', []);
+
         return $this->render('stripe/index.html.twig', [
             'controller_name' => 'StripeController',
         ]);
@@ -57,7 +60,7 @@ final class StripeController extends AbstractController
 
         switch($event->type){
             case 'payment_intent.succeeded':
-                file_put_contents("log.txt", "succeeded", FILE_APPEND);
+                // file_put_contents("log.txt", "succeeded", FILE_APPEND);
                 $paymentIntent = $event->data->object;
 
                 $fileName = 'stripe-detail-'.uniqid().'.txt';
