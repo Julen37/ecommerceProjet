@@ -115,31 +115,44 @@ class OrderController extends AbstractController
 #endregion CITY COST
 
 #region EDITOR ORDERS
-    #[Route('/editor/order', name: 'app_orders_show')] 
-    public function getAllOrder(OrderRepository $orderRepo,  PaginatorInterface $paginator, Request $request): Response
+    #[Route('/editor/order/{type}/', name: 'app_orders_show')] 
+    public function getAllOrder($type, OrderRepository $orderRepo, PaginatorInterface $paginator, Request $request): Response
     {
-        $orders= $orderRepo->findAll();
-        $orderKnp =$paginator->paginate(
-            $orders,
+
+        if($type == 'is-completed'){
+            $data = $orderRepo->findBy(['isCompleted'=>1],['id'=>'DESC']);
+        } else if($type == 'pay-on-stripe-not-delivered'){
+            $data = $orderRepo->findBy(['isCompleted'=>null, 'payOnDelivery'=>0,'isPaymentCompleted'=>1],['id'=>'DESC']);
+        } else if($type == 'pay-on-stripe-is-delivered'){
+            $data = $orderRepo->findBy(['isCompleted'=>1, 'payOnDelivery'=>0,'isPaymentCompleted'=>1],['id'=>'DESC']); 
+        }else if($type == 'no-delivery'){
+            $data = $orderRepo->findBy(['isCompleted'=>null,'payOnDelivery'=>0,'isPaymentCompleted'=>0],['id'=>'DESC']);
+        }else if($type == 'all-orders'){
+            $data = $orderRepo->findAll(['id'=>'DESC']);
+        }
+
+        // $orders= $orderRepo->findAll();
+        $orders =$paginator->paginate(
+            $data,
             $request->query->getInt('page', 1),
             5
         );
 
         return $this->render('order/orders.html.twig', [
-            'orders'=>$orderKnp,
+            'orders'=>$orders,
         ]);
     }
 #endregion EDITOR ORDERS
 
 #region UPDATE 
     #[Route('/editor/order/{id}/is-completed/update', name: 'app_orders_is-completed-update')] 
-    public function isCompletedUpdate($id, OrderRepository $orderRepo, EntityManagerInterface $entityManager): Response
+    public function isCompletedUpdate(Request $request, $id, OrderRepository $orderRepo, EntityManagerInterface $entityManager): Response
     {
         $order = $orderRepo->find($id);
         $order->setIsCompleted(true);
         $entityManager->flush();
         $this->addFlash('success', 'The order have been updated !');
-        return $this->redirectToRoute('app_orders_show');
+        return $this->redirect($request->headers->get('referer'));
     }
 #endregion UPDATE
 
