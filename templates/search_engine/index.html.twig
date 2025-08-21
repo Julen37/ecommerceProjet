@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Home Page{% endblock %}
+{% block title %}Search{% endblock %}
 
 {% block body %}
     <div class="container"> 
-        <h1 class="text-center mt-4 mb-4">Products</h1>
+        <h1 class="text-center mt-4 mb-4">Results of the search {{word}}</h1>
         <div class="row">
             {% for product in products %}
             <div class="col-md-3 mb-2">
@@ -20,6 +20,5 @@
             </div>
             {% endfor %}   
         </div>
-        {{ knp_pagination_render(products, 'layouts/pagination_template.html.twig') }}
     </div>
 {% endblock %}
