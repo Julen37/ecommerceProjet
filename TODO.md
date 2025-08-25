@@ -8,12 +8,14 @@ W - WON'T-HAVE
 ## TODO
 
 - M : page d'accueil
-- OK : image carré sur les produits
+- M : image carré sur les produits 
 - M : footer
     - CGU
     - mentions legales
     - contactez nous
 - M : gestion de stock
+    - decrementer le stock confirm commande
+    - empecher ajout de produit superieur au stock actuel
 
 - S : description sur tout les produits
 - S : meta description 

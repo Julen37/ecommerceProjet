@@ -76,6 +76,16 @@ final class StripeController extends AbstractController
                 if($cartPrice*100 == $stripeTotalAmount){
                     $order->setIsPaymentCompleted(1); // true ou 1 fonctionne ?
                     // file_put_contents($fileName, $orderId);
+
+                    foreach ($order->getOrderProducts() as $orderProduct){
+                        $quantity = $orderProduct->getQuantity();
+                        $product = $orderProduct->getProduct();
+                        $stock = $product->getStock();
+
+                        $updateStock = $stock - $quantity;
+                        $product->setStock($updateStock);
+                    };
+
                     $entityManager->flush();
                 }
 
