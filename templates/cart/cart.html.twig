@@ -17,10 +17,14 @@
                 <tr>
                     <td>{{item.product.name}}</td>
                     <td>{{item.product.price}}</td>
-                    <td>{{item.quantity}}</td>
+                    <td>
+                        <a href="{{ path('app_cart_product_remove', {'id': item.product.id}) }}" class="text-danger text-decoration-none">(-)</a>
+                        {{item.quantity}}
+                        <a href="{{ path('app_cart_new', {'id': item.product.id}) }}" class="text-success text-decoration-none">(+)</a>
+                    </td>
                     <td>{{item.product.price * item.quantity}}</td>
                     <td>
-                        <a href="{{ path('app_cart_product_remove', {'id': item.product.id}) }}" class="text-danger text-decoration-none">Remove from cart</a>
+                        <a href="{{ path('app_cart_product_remove_line', {'id': item.product.id}) }}" class="text-danger text-decoration-none">Remove all</a>
                     </td>
                 </tr>
             {% else %}
