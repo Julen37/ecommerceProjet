@@ -14,7 +14,7 @@ final class SearchEngineController extends AbstractController
     public function index(Request $request, ProductRepository $productRepo): Response
     {
 
-        if ($request->isMethod('POST')) {
+        if ($request->isMethod('GET')) {
             // $data = $request->request->all();
             // $word = $data['word'];
             $word = $request->get('word');
