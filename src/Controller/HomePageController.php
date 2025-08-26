@@ -59,6 +59,15 @@ final class HomePageController extends AbstractController
     }
 #endregion SHOW
 
+#region NAVBAR CATEGO
+public function generateNavbarCategories(CategoryRepository $categoryRepo,): Response {
+     return $this->render('layouts/_categories.html.twig', [
+            'categories' => $categoryRepo->findAll()
+        ]);
+}
+// pour avoir le drop menu categories dans chaque page twig
+#endregion NAVBAR CATEGO
+
 #region FILTER
     #[Route('/product/subcategory/{id}/filter', name: 'app_home_product_filter', methods: ['GET'])]
     public function filter($id, SubCategoryRepository $subcatRepo, CategoryRepository $categoryRepo,): Response
@@ -75,4 +84,6 @@ final class HomePageController extends AbstractController
         ]);
     }
 #endregion FILTER
+
+
 }

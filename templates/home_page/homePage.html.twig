@@ -13,8 +13,13 @@
                     <img src="{{asset('uploads/images/'~product.image)}}" class="card-img-top" >
                     <div class="card-body border-light mb-3 " >
                     <a href="{{ path('app_home_product_show', {'id':product.id}) }}" class="titleProductLink"><h5 class="card-title">{{product.name}}</h5></a>
-                        <h5 class="card-text">{{product.price}}€</h5>
+                        <h5 class="card-text">{{product.price}} €</h5>
                         <p class="card-text">{{product.description|slice(0,60)}}...</p>
+                        {% if product.stock > 0 %}
+                            <span class="badge bg-success mb-2">Available ({{ product.stock }} in stock)</span>
+                        {% else %}
+                            <span class="badge bg-danger">Out of stock</span>
+                        {% endif %}
                         <a href="{{ path('app_cart_new', {'id':product.id}) }}" class="btn btn-outline-success">Add to cart</a>
                     </div>
                 </div>

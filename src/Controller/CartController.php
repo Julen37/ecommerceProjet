@@ -33,7 +33,7 @@ final class CartController extends AbstractController
     }
 #endregion CART
 
-#region ADD CART
+#region ADD 1 CART
     #[Route('/cart/add/{id}', name: 'app_cart_new', methods: ['GET'])]
     public function addProductToCart(int $id, SessionInterface $session, Request $request, Product $product): Response
     {// int c'est une declaration de type qui attend imperativement que l'id soit un entier = inting
@@ -47,7 +47,7 @@ final class CartController extends AbstractController
             $cart[$id]=1; // sinon on l'ajoute avec une quantité de 1
         }
         if ($cart[$id] > $stock){
-            $this->addFlash('danger', 'Stock is currently insufficient, maximum' .$stock. 'products');
+            $this->addFlash('danger', 'Stock is currently insufficient, maximum ' .$stock. ' products');
         
             return $this->redirect($request->headers->get('referer'));
         } 
@@ -58,16 +58,13 @@ final class CartController extends AbstractController
     }
 #endregion ADD CART
 
-#region REMOVE TO CART
+#region REMOVE 1 TO CART
     #[Route('/cart/remove/{id}', name: 'app_cart_product_remove', methods: ['GET'])]
     public function removeToCart(int $id, SessionInterface $session): Response
     {
        
         $cart = $session->get('cart',[]);
         
-        // if (!empty($cart[$id])){
-        //     unset($cart[$id]); 
-        // }
         if (!empty($cart[$id])){
             if ($cart[$id] > 1){
                 $cart[$id]--;

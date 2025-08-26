@@ -25,7 +25,7 @@
                     </td>
                     <td>{{item.product.price * item.quantity}}</td>
                     <td>
-                        <a href="{{ path('app_cart_product_remove_line', {'id': item.product.id}) }}" class="text-danger text-decoration-none">Remove all</a>
+                        <a href="{{ path('app_cart_product_remove_line', {'id': item.product.id}) }}" class="text-danger text-decoration-none">Remove the product(s)</a>
                     </td>
                 </tr>
             {% else %}
