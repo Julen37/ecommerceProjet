@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
-use App\Repository\ProductRepository;
 use App\Service\Cart;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Product;
+use App\Repository\ProductRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class CartController extends AbstractController
 {
@@ -33,16 +35,22 @@ final class CartController extends AbstractController
 
 #region ADD CART
     #[Route('/cart/add/{id}', name: 'app_cart_new', methods: ['GET'])]
-    public function addProductToCart(int $id, SessionInterface $session): Response
+    public function addProductToCart(int $id, SessionInterface $session, Request $request, Product $product): Response
     {// int c'est une declaration de type qui attend imperativement que l'id soit un entier = inting
        
         $cart = $session->get('cart',[]);
         //recup le panier actuel de la session 
+        $stock = $product->getStock();
         if (!empty($cart[$id])){ //si le produit est deja dans dans le panier, aka different de vide/de 0
             $cart[$id]++; // on incremente sa quantité
         }else{
             $cart[$id]=1; // sinon on l'ajoute avec une quantité de 1
         }
+        if ($cart[$id] > $stock){
+            $this->addFlash('danger', 'Stock is currently insufficient, maximum' .$stock. 'products');
+        
+            return $this->redirect($request->headers->get('referer'));
+        } 
 
         $session->set('cart', $cart); // met a jour le panier dans la session
       

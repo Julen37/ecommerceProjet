@@ -2,14 +2,15 @@
 
 namespace App\Controller;
 
-use App\Repository\OrderRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Stripe;
+use App\Repository\OrderRepository;
+use App\Repository\ProductRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class StripeController extends AbstractController
 {
@@ -34,7 +35,8 @@ final class StripeController extends AbstractController
     #[Route('/stripe/notify', name: 'app_stripe_notify')]
     public function stripeNotify(Request $request, 
                                 OrderRepository $orderRepo,
-                                EntityManagerInterface $entityManager): Response
+                                EntityManagerInterface $entityManager,
+                                ProductRepository $productRepo): Response
     {
         Stripe::setApiKey($_SERVER['STRIPE_SECRET_KEY']);
         // file_put_contents("log.txt", ""); 
